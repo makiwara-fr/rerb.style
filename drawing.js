@@ -5,7 +5,7 @@ var makiwara_rer_style = {
 	
 	
 	/* general settings */
-	canvas_size : {x: 1200, y: 400},
+	canvas_size : {x: 1200, y: 500},
 	line_thickness : 15,
 	general_size : 300,
 	
@@ -113,17 +113,23 @@ var makiwara_rer_style = {
 			var text = new Path2D();
 			
 			ctx.fillStyle = "black";
-			ctx.rotate(-Math.PI / 4);
+			
+			
 			ctx.textAlign = 'right';
 			if (top_or_down){
-				ctx.translate(x,y + 2*this.line_thickness);
+				
 				// ctx.fillText(stations_lists[i], x , y + 2*this.line_thickness);
-				ctx.fillText(stations_lists[i], 0 , 0);
+				ctx.translate(x,y +  2 * this.line_thickness);
+				
 				
 			}
 			else{
-				ctx.fillText(stations_lists[i], x , y - 2*this.line_thickness);
+
+				// ctx.fillText(stations_lists[i], x , y - 2*this.line_thickness);
+				ctx.translate(x,y - 2 * this.line_thickness);
 			}
+			ctx.rotate(-Math.PI / 2);
+			ctx.fillText(stations_lists[i], 0 , 0);
 			ctx.restore();
 		}
 		//add a listener to detect clicks
