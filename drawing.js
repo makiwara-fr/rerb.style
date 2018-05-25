@@ -1,3 +1,4 @@
+
 var makiwara_rer_style = {
 	
 	
@@ -6,16 +7,17 @@ var makiwara_rer_style = {
 			Data model
 	
 	 ============================*/
-	 
-	 
-	 
-	 
+
+
+
+
 	/* general settings */
 	canvas_size : {x: 1200, y: 500},
 	line_thickness : 15,
 	general_size : 300,
 	canvas: null,
 	ctx: null,
+	player: null,
 	
 	
 	/* Drawing the line */
@@ -44,11 +46,11 @@ var makiwara_rer_style = {
 	
 	
 	/* define size of canvas and set general parameters dynamically */
-	set_canvas: function(){
+	set_canvas: function () {
 
 		this.canvas = document.getElementById("line");
 		
-		if  (window.innerWidth - 40 > this.canvas_size.x){
+		if (window.innerWidth - 40 > this.canvas_size.x) {
 			this.canvas_size.x = window.innerWidth - 40;
 			console.log("Window is " + window.innerWidth + " wide. Setting canvas to : " + this.canvas_size.x);
 			
@@ -57,22 +59,22 @@ var makiwara_rer_style = {
 		this.canvas.width = this.canvas_size.x;
 		this.canvas.height = this.canvas_size.y;
 		//define main proportion
-		this.general_size = (this.canvas_size.x - 100 )/ 2.3;
+		this.general_size = (this.canvas_size.x - 100) / 2.3;
 		
 		
 		/* define the position of main nodes of the line */
-		this.line_nodes ={
-			n_north : {x: 50 + (this.general_size * 0.4),y: 250},
-			n_south : {x: 50 + (this.general_size * 1.4) ,y: 250},
-			n_sw: {x:50 + (this.general_size * 1.5), y: 350},
+		this.line_nodes = {
+			n_north : {x: 50 + (this.general_size * 0.4), y: 250},
+			n_south : {x: 50 + (this.general_size * 1.4), y: 250},
+			n_sw: {x: 50 + (this.general_size * 1.5), y: 350},
 			n_se: {x: 50 + (this.general_size * 1.5), y: 150},
-			n_ne: {x: 50 + (this.general_size * 0.3) , y: 150},
+			n_ne: {x: 50 + (this.general_size * 0.3), y: 150},
 			n_nw: {x: 50 + (this.general_size * 0.3), y: 350},
 			n_fnw: {x: 50, y: 350},
 			n_fne: {x: 50 + (this.general_size * 0.1), y: 150},
 			n_fsw: {x: 50 + (this.general_size * 2.3), y: 350},
 			n_fse: {x: (this.canvas_size - 50), y: 150}
-		}
+		};
 		
 		/* define context */
 		this.ctx = this.canvas.getContext("2d");
@@ -83,13 +85,13 @@ var makiwara_rer_style = {
 
 	
 	
-	draw_line: function(){
+	draw_line: function () {
 		
 		
-		if (this.ctx){
+		if (this.ctx) {
 			
 			
-			var line = new Path2D()
+			var line = new Path2D();
 			
 			line.lineWidth = this.line_thickness;
 			
@@ -100,7 +102,7 @@ var makiwara_rer_style = {
 			line.lineTo(this.line_nodes.n_sw.x, this.line_nodes.n_sw.y);
 			line.lineTo(this.line_nodes.n_fsw.x, this.line_nodes.n_fsw.y);
 			line.moveTo(this.line_nodes.n_south.x, this.line_nodes.n_south.y);
-			line.lineTo(this.line_nodes.n_se.x , this.line_nodes.n_se.y);
+			line.lineTo(this.line_nodes.n_se.x, this.line_nodes.n_se.y);
 			line.lineTo(this.line_nodes.n_fse.x, this.line_nodes.n_fse.y);
 			line.moveTo(this.line_nodes.n_north.x, this.line_nodes.n_north.y);
 			line.lineTo(this.line_nodes.n_ne.x, this.line_nodes.n_ne.y);
@@ -117,20 +119,19 @@ var makiwara_rer_style = {
 	},
 	
 	
-	add_stations_on_branch: function(stations_lists, point_orig, point_destination, top_or_down){
-		var canvas = document.getElementById("line");
-		var ctx = canvas.getContext("2d");
-		
-		var x,y, i;
+	add_stations_on_branch: function (stations_lists, point_orig, point_destination, top_or_down) {
+        
+        var x, y, i, l;
+		l = stations_lists.length
 
-		for (i=0; i < stations_lists.length; i++){
+		for (i = 0; i < l; i++){
 			
 			//draw a circle per station
 			var circle = new Path2D();
 			this.ctx.fillStyle = this.color_default_stations;
 			this.ctx.rotate(0);
-			x = (point_destination.x - point_orig.x ) / (stations_lists.length-1) * i + point_orig.x;
-			y = (point_destination.y - point_orig.y ) / (stations_lists.length-1) * i + point_orig.y;
+			x = (point_destination.x - point_orig.x ) / (stations_lists.length - 1) * i + point_orig.x;
+			y = (point_destination.y - point_orig.y ) / (stations_lists.length - 1) * i + point_orig.y;
 			
 			circle.moveTo(x, y);
 			circle.arc(x, y , this.line_thickness, 0, 2*Math.PI, true);
@@ -145,7 +146,7 @@ var makiwara_rer_style = {
 			this.ctx.fillStyle = "black";
 			
 			
-			ctx.textAlign = 'right';
+			this.ctx.textAlign = 'right';
 			if (top_or_down){
 				
 				// ctx.fillText(stations_lists[i], x , y + 2*this.line_thickness);
@@ -176,11 +177,13 @@ var makiwara_rer_style = {
             var y = e.offsetY;
 			var i, l;
 			l = makiwara_rer_style.stations_dots.length
-			for (i=0; i< l; i++){
+			for (i = 0; i < l; i++) {
+				/* dectect if a station has been clicked on */
 				if (makiwara_rer_style.ctx.isPointInPath(makiwara_rer_style.stations_dots[i].shape, x, y)) {
 					console.log('Clicked! on '+ makiwara_rer_style.stations_dots[i].id );
 					
-						makiwara_rer_style.play(makiwara_rer_style.stations_dots[i].shape )
+						// makiwara_rer_style.play(makiwara_rer_style.stations_dots[i].shape )
+					makiwara_rer_style.player.play(makiwara_rer_style.stations_dots[i].shape);
 						break;
 					
 				}
@@ -195,35 +198,37 @@ var makiwara_rer_style = {
 	 ============================*/
 	 
 	 
-	play: function(current_path){
-		this.playing = !this.playing
-		console.log(this.playing);
-		
-		if (this.playing == true){
-			/* change the color of the starting position */
-			current_path.fillStyle = this.color_selected_stations;
-			this.ctx.fill(current_path);
-			/* play sound until next station */
-			var milliseconds = 3000;
-			var start = new Date().getTime();
-			  for (var i = 0; i < 1e7; i++) {
-				if ((new Date().getTime() - start) > milliseconds){
-				  break;
-				}
-			  }
-			/* change back color of the former stations */
-			
-			/* move to next station */
-			console.log("Next stations");
-			// this.playing = false;
-			console.log(this.playing);
-		}
-	
-	}
+	// play: function(current_path){
+// 		this.playing = !this.playing
+// 		console.log(this.playing);
+//
+// 		if (this.playing == true){
+// 			/* change the color of the starting position */
+// 			current_path.fillStyle = this.color_selected_stations;
+// 			this.ctx.fill(current_path);
+// 			/* play sound until next station */
+// 			var milliseconds = 3000;
+// 			var start = new Date().getTime();
+// 			  for (var i = 0; i < 1e7; i++) {
+// 				if ((new Date().getTime() - start) > milliseconds){
+// 				  break;
+// 				}
+// 			  }
+// 			/* change back color of the former stations */
+//
+// 			/* move to next station */
+// 			console.log("Next stations");
+// 			// this.playing = false;
+// 			console.log(this.playing);
+// 		}
+//
+// 	}
 	 
 	
 }
 
+console.log("RERB.style initialization");
+console.log("=========================");
 /*set canvas general format*/
 makiwara_rer_style.set_canvas();
 /* Draw the shape of the line */
@@ -232,3 +237,6 @@ makiwara_rer_style.draw_line();
 makiwara_rer_style.add_stations();
 /* check all stations displayed */
 console.log(makiwara_rer_style.stations_dots);
+/* create animation manager */
+makiwara_rer_style.player = makiwara_rer_style_animation;
+makiwara_rer_style.player.init();
