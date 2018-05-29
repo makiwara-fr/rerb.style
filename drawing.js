@@ -1,5 +1,68 @@
 
-var makiwara_rer_style = {
+if (makiwara === undefined){
+	var makiwara = {};
+}
+if (makiwara.rerbstyle === undefined) {
+	makiwara.rerbstyle = {};
+}
+
+class Thread {
+
+	constructor (runnable){
+		this.runnable = runnable;
+		this.running = false;
+		this.tobestopped = false;
+		this.args = {};
+	}
+	
+	/* start a thread looping a specific speed in milliseconds for a potential max_duration */
+	start (loop_duration, max_duration) {
+		//setup value or get default
+		if (loop_duration !== undefined) {
+			this.loop_duration = loop_duration;
+		}
+		if (max_duration !== undefined) {
+			this.max_duration = max_duration
+		}
+		else if (this.max_duration === undefined){
+				this.max_duration = 10000;
+		}
+		
+			
+		this.running = true;
+		if (this.start_time === undefined) {
+			this.start_time = new Date().getTime();
+		}
+	
+		if (new Date().getTime() - this.start_time < this.max_duration && this.tobestopped != true) {
+			//we are not looping for too long and not needing to stop
+			
+			this.runnable.run(this.args);
+			var t = this;
+			var fun = function (){
+				t.start();
+			}
+			setTimeout(fun, this.loop_duration);
+		}
+		else {
+				// stop order received or timeout so we reset data
+				this.running = false;
+				this.tobestopped = false;
+				this.start_time = undefined;
+				console.log("thread ended");
+		}
+	}
+	
+	/* Stop the running thread */
+	stop () {
+		if (this.running){
+			this.tobestopped = true;
+			console.log("stop order received");
+		}
+	}
+}
+
+makiwara.rerbstyle.drawing = {
 	
 	
 	/* ==========================
@@ -32,7 +95,7 @@ var makiwara_rer_style = {
 	route : [],
 	
 	
-	/* managing the animations and all the elements */
+	/* all the elements */
 	stations_dots: [],
 	playing: false,
 	
@@ -176,15 +239,26 @@ var makiwara_rer_style = {
             var x = e.offsetX;
             var y = e.offsetY;
 			var i, l;
-			l = makiwara_rer_style.stations_dots.length
+			l = makiwara.rerbstyle.drawing.stations_dots.length
 			for (i = 0; i < l; i++) {
 				/* dectect if a station has been clicked on */
-				if (makiwara_rer_style.ctx.isPointInPath(makiwara_rer_style.stations_dots[i].shape, x, y)) {
-					console.log('Clicked! on '+ makiwara_rer_style.stations_dots[i].id );
+				if (makiwara.rerbstyle.drawing.ctx.isPointInPath(makiwara.rerbstyle.drawing.stations_dots[i].shape, x, y)) {
+					console.log('Clicked! on '+ makiwara.rerbstyle.drawing.stations_dots[i].id );
 					
-						// makiwara_rer_style.play(makiwara_rer_style.stations_dots[i].shape )
-					makiwara_rer_style.player.play(makiwara_rer_style.stations_dots[i].shape);
-						break;
+					//track status of thread
+					makiwara.rerbstyle.drawing.playing = !makiwara.rerbstyle.drawing.playing;
+
+					if (makiwara.rerbstyle.drawing.playing == true){
+						makiwara.rerbstyle.drawing.player.args.current_node = makiwara.rerbstyle.drawing.stations_dots[i];
+						makiwara.rerbstyle.drawing.player.start(1000);
+					}
+					else {
+						makiwara.rerbstyle.drawing.player.stop();
+					}
+						// makiwara.rerbstyle.drawing.play(makiwara.rerbstyle.drawing.stations_dots[i].shape )
+					// makiwara.rerbstyle.drawing_animation.play(makiwara.rerbstyle.drawing.stations_dots[i].shape, makiwara.rerbstyle.drawing);
+					
+					break;
 					
 				}
 			}
@@ -230,13 +304,13 @@ var makiwara_rer_style = {
 console.log("RERB.style initialization");
 console.log("=========================");
 /*set canvas general format*/
-makiwara_rer_style.set_canvas();
+makiwara.rerbstyle.drawing.set_canvas();
 /* Draw the shape of the line */
-makiwara_rer_style.draw_line();
+makiwara.rerbstyle.drawing.draw_line();
 /* add stations on the line */
-makiwara_rer_style.add_stations();
+makiwara.rerbstyle.drawing.add_stations();
 /* check all stations displayed */
-console.log(makiwara_rer_style.stations_dots);
+console.log(makiwara.rerbstyle.drawing.stations_dots);
 /* create animation manager */
-makiwara_rer_style.player = makiwara_rer_style_animation;
-makiwara_rer_style.player.init();
+makiwara.rerbstyle.drawing.player = new Thread(makiwara.rerbstyle.animation);
+//makiwara.rerbstyle.drawing.player.init();
