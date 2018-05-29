@@ -39,13 +39,15 @@ makiwara.rerbstyle.animation = {
 		console.log("Looping thread");
 		if (args !== undefined){
 			this.current_node = args.current_node;
-			console.log("Run started with arguments : " + args.current_node.id);
+			this.current_node_index = this.find_station_index(this.current_node.id);
+			console.log("Run started with arguments : " + args.current_node.id + "index : " + this.current_node_index);
 			this.current_node = args.current_node;
 		}
 		
 		/* change the color of the starting position */
-		this.ctx.fillStyle = makiwara.rerbstyle.drawing.color_selected_stations;
-		this.ctx.fill(this.current_node.shape);
+		// this.ctx.fillStyle = makiwara.rerbstyle.drawing.color_selected_stations;
+		// 		this.ctx.fill(this.current_node.shape);
+		makiwara.rerbstyle.drawing.light_node(this.current_node.shape);
 		/* play sound until next station */
 		
 		
@@ -54,7 +56,7 @@ makiwara.rerbstyle.animation = {
 		// this.ctx.fill(this.current_node.shape);
 		
 		/* move to next station */
-		console.log("Next stations " + this.next_stations());
+		console.log("Next stations " + this.next_stations_index()) + makiwara.rerbstyle.drawing.retrieve_stations(this.route[this.current_node_index + 1]);
 		// this.playing = false;
 		;
 		
@@ -63,36 +65,29 @@ makiwara.rerbstyle.animation = {
 	
 	/* managing the animation */
 	
-	next_stations : function () {
-		if (this.current_node !== undefined){
-			var i, l;
-			l = this.route.length;
-			for (i=0; i < l - 1; i++){
-				if (this.current_node.id == this.route[i]){
-					return this.route[i+1];
-					break;
-				}
-			}
-			return "not found";
-			
+	next_stations_index : function () {
+		if (this.current_node_index == this.route.length){
+			return 0
 		}
-	}
+		else {
+			return this.current_node_index + 1;
+		}
+			
+	},
 	
 	find_station_index : function (station) {
 		if (this.current_node !== undefined){
 			this.current_node = 0;
 		}
 		var i, l;
-			l = this.route.length;
-			for (i=this.current_node; i < l - 1; i++){
-				if (station == this.route[i]){
-					return i;
-					break;
-				}
+		l = this.route.length;
+		for (i = this.current_node_index; i < l ; i++){
+			if (this.route[i] == station){
+				return i;
 			}
-			return -1;
-			
-		}
+		}		
+		return -1;
+		
 	}
 
 

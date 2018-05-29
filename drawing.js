@@ -267,37 +267,42 @@ makiwara.rerbstyle.drawing = {
 	
 	/* ==========================
 	
-			Animating the line
+			Changing node
 	
 	 ============================*/
 	 
 	 
-	// play: function(current_path){
-// 		this.playing = !this.playing
-// 		console.log(this.playing);
-//
-// 		if (this.playing == true){
-// 			/* change the color of the starting position */
-// 			current_path.fillStyle = this.color_selected_stations;
-// 			this.ctx.fill(current_path);
-// 			/* play sound until next station */
-// 			var milliseconds = 3000;
-// 			var start = new Date().getTime();
-// 			  for (var i = 0; i < 1e7; i++) {
-// 				if ((new Date().getTime() - start) > milliseconds){
-// 				  break;
-// 				}
-// 			  }
-// 			/* change back color of the former stations */
-//
-// 			/* move to next station */
-// 			console.log("Next stations");
-// 			// this.playing = false;
-// 			console.log(this.playing);
-// 		}
-//
-// 	}
-	 
+	light_node : function (node){
+	
+		this.ctx.fillStyle == this.color_selected_stations;
+		this.ctx.fill(node);
+	},
+	
+	dark_node : function (node){
+	
+		this.ctx.fillStyle == this.color_default_stations;
+		this.ctx.fill(node);
+	},
+
+	/* ==========================
+	
+			Getters & setters
+	
+	 ============================*/
+
+
+	/* send the id and the path representing a station based on its name */
+	retrieve_stations : function (station) {
+		var i,l;
+		l = this.stations_dots;
+		for (i = 0; i < l ; i++){
+			if (this.stations_dots[i] == station){
+				return stations_dots[i]
+				break
+			}
+		}
+		return null;
+	}
 	
 }
 
