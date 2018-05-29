@@ -18,7 +18,8 @@ makiwara.rerbstyle.animation = {
 	urls : [],
 	ctx: null,
 	playing: false,
-	current_node: null,
+	current_node_index: null,
+	current_node: undefined,
 	route: ["Aéroport Charles de Gaulle 2 TGV", "Aéroport Charles de Gaulle 1", "Parc des expositions", "Villepinte", "Sevran Beaudottes"],
 	
 	/* ==========================
@@ -73,6 +74,23 @@ makiwara.rerbstyle.animation = {
 				}
 			}
 			return "not found";
+			
+		}
+	}
+	
+	find_station_index : function (station) {
+		if (this.current_node !== undefined){
+			this.current_node = 0;
+		}
+		var i, l;
+			l = this.route.length;
+			for (i=this.current_node; i < l - 1; i++){
+				if (station == this.route[i]){
+					return i;
+					break;
+				}
+			}
+			return -1;
 			
 		}
 	}
