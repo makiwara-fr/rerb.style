@@ -43,12 +43,14 @@ makiwara.rerbstyle.animation = {
 		}
 		
 		/* change the color of the starting position */
-		this.current_node.shape.fillStyle = makiwara.rerbstyle.drawing.color_selected_stations;
+		this.ctx.fillStyle = makiwara.rerbstyle.drawing.color_selected_stations;
 		this.ctx.fill(this.current_node.shape);
 		/* play sound until next station */
 		
 		
 		/* change back color of the former stations */
+		// this.ctx.fillStyle = makiwara.rerbstyle.drawing.color_default_stations;
+		// this.ctx.fill(this.current_node.shape);
 		
 		/* move to next station */
 		console.log("Next stations " + this.next_stations());
