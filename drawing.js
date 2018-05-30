@@ -135,8 +135,9 @@ makiwara.rerbstyle.drawing = {
 			n_nw: {x: 50 + (this.general_size * 0.3), y: 350},
 			n_fnw: {x: 50, y: 350},
 			n_fne: {x: 50 + (this.general_size * 0.1), y: 150},
-			n_fsw: {x: 50 + (this.general_size * 2.3), y: 350},
-			n_fse: {x: (this.canvas_size - 50), y: 150}
+			n_fsw: {x: 50 + (this.general_size * 1.7), y: 350},
+			n_fse: {x: (this.canvas_size.x - 50), y: 150}
+
 		};
 		
 		/* define context */
@@ -274,13 +275,13 @@ makiwara.rerbstyle.drawing = {
 	 
 	light_node : function (node){
 	
-		this.ctx.fillStyle == this.color_selected_stations;
+		this.ctx.fillStyle = this.color_selected_stations;
 		this.ctx.fill(node);
 	},
 	
 	dark_node : function (node){
 	
-		this.ctx.fillStyle == this.color_default_stations;
+		this.ctx.fillStyle = this.color_default_stations;
 		this.ctx.fill(node);
 	},
 
@@ -294,10 +295,10 @@ makiwara.rerbstyle.drawing = {
 	/* send the id and the path representing a station based on its name */
 	retrieve_stations : function (station) {
 		var i,l;
-		l = this.stations_dots;
+		l = this.stations_dots.length;
 		for (i = 0; i < l ; i++){
-			if (this.stations_dots[i] == station){
-				return stations_dots[i]
+			if (this.stations_dots[i].id == station){
+				return this.stations_dots[i]
 				break
 			}
 		}
