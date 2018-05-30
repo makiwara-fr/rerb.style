@@ -87,7 +87,7 @@ makiwara.rerbstyle.drawing = {
 	line_nodes: {},
 	stations_nw : ["Aéroport Charles de Gaulle 2 TGV", "Aéroport Charles de Gaulle 1", "Parc des expositions", "Villepinte", "Sevran Beaudottes"],
 	stations_north_to_south_main_branch : ["Aulnay sous bois", "Le blanc Mesnil", "Drancy", "Le Bourget", "La Courneuve Aubervilliers", "La Plaine Stade de France", "Gare du Nord", "Chatelet-Les halles", "St Michel Notre Dame", "Luxembourg", "Port Royal", "Denfert-Rochereau", "Cité Universitaire", "Gentilly", "Laplace", "Arcueil-Cachan", "Bagneux", "Bourg-la-Reine"],
-	color_line: "#0000FF",
+	color_line: "#4c90cd",
 	color_selected_stations: "#FF0000",
 	color_default_stations: "#FFFFFF",
 	

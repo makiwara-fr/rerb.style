@@ -18,9 +18,9 @@ makiwara.rerbstyle.animation = {
 	urls : [],
 	ctx: null,
 	playing: false,
-	current_node_index: 0,
+	current_node_index: undefined,
 	current_node: undefined,
-	route: ["Aéroport Charles de Gaulle 2 TGV", "Aéroport Charles de Gaulle 1", "Parc des expositions", "Villepinte", "Sevran Beaudottes"],
+	route: ["Aéroport Charles de Gaulle 2 TGV", "Aéroport Charles de Gaulle 1", "Parc des expositions", "Villepinte", "Sevran Beaudottes", "Aulnay sous bois", "Le blanc Mesnil", "Drancy", "Le Bourget", "La Courneuve Aubervilliers", "La Plaine Stade de France", "Gare du Nord", "Chatelet-Les halles", "St Michel Notre Dame", "Luxembourg", "Port Royal", "Denfert-Rochereau", "Cité Universitaire", "Gentilly", "Laplace", "Arcueil-Cachan", "Bagneux", "Bourg-la-Reine"],
 	
 	/* ==========================
 	
@@ -54,7 +54,7 @@ makiwara.rerbstyle.animation = {
 		}
 		
 		/* change back color of the former stations */
-		makiwara.rerbstyle.drawing.dark_node(this.current_node.shape);
+		//makiwara.rerbstyle.drawing.dark_node(this.current_node.shape);
 		
 		/* move to next station */
 		// console.log("Next stations " + this.next_stations_index() +" " + makiwara.rerbstyle.drawing.retrieve_stations(this.route[this.next_stations_index()]);
@@ -68,7 +68,10 @@ makiwara.rerbstyle.animation = {
 	/* managing the animation */
 	
 	next_stations_index : function () {
-		if (this.current_node_index == this.route.length - 1){
+		if (this.current_node_index < 0) {
+			return -1;
+		}
+		else if (this.current_node_index == this.route.length - 1){
 			return 0
 		}
 		else {
