@@ -77,6 +77,7 @@ makiwara.rerbstyle.drawing = {
 	/* general settings */
 	canvas_size : {x: 1200, y: 500},
 	line_thickness : 15,
+	stations_diameter : 14,
 	general_size : 300,
 	canvas: null,
 	ctx: null,
@@ -87,6 +88,9 @@ makiwara.rerbstyle.drawing = {
 	line_nodes: {},
 	stations_nw : ["Aéroport Charles de Gaulle 2 TGV", "Aéroport Charles de Gaulle 1", "Parc des expositions", "Villepinte", "Sevran Beaudottes"],
 	stations_north_to_south_main_branch : ["Aulnay sous bois", "Le blanc Mesnil", "Drancy", "Le Bourget", "La Courneuve Aubervilliers", "La Plaine Stade de France", "Gare du Nord", "Chatelet-Les halles", "St Michel Notre Dame", "Luxembourg", "Port Royal", "Denfert-Rochereau", "Cité Universitaire", "Gentilly", "Laplace", "Arcueil-Cachan", "Bagneux", "Bourg-la-Reine"],
+	stations_south_west_branch : ["Sceaux", "Fontenay-aux-roses", "Robinson"],
+	stations_south_east_branch : ["Parc de Sceaux", "La Croix de Berny", 'Antony',"Fontaine-Michalon", "Les Baconnets", "Massy-Verrières", "Massy-Palaiseau", "Palaiseau", "Palaiseau-Villebon", "Lozère",  "Le Guichet", "Orsay-ville", "Bures-sur-Yvette", "La Hacquinière", "Gif-sur-Yvette", "Courcelles-sur-Yvette","Saint-Rémy-lès-Chevreuse"],
+	stations_north_east_branch : ["Mitry-Claye", "Villeparisis Mitry-le-Neuf", "Vert Galant", "Sevran-Livry"],
 	color_line: "#4c90cd",
 	color_selected_stations: "#FF0000",
 	color_default_stations: "#FFFFFF",
@@ -198,7 +202,7 @@ makiwara.rerbstyle.drawing = {
 			y = (point_destination.y - point_orig.y ) / (stations_lists.length - 1) * i + point_orig.y;
 			
 			circle.moveTo(x, y);
-			circle.arc(x, y , this.line_thickness, 0, 2*Math.PI, true);
+			circle.arc(x, y , this.stations_diameter, 0, 2*Math.PI, true);
 			this.ctx.fill(circle);
 			//add to general list of dots
 			this.stations_dots.push({id: stations_lists[i], shape: circle});
@@ -210,16 +214,16 @@ makiwara.rerbstyle.drawing = {
 			this.ctx.fillStyle = "black";
 			
 			
-			this.ctx.textAlign = 'right';
+			
 			if (top_or_down){
+				this.ctx.textAlign = 'right';
 				
-				// ctx.fillText(stations_lists[i], x , y + 2*this.line_thickness);
 				this.ctx.translate(x,y +  2 * this.line_thickness);
 				
 				
 			}
 			else{
-
+				this.ctx.textAlign = 'left';
 				// ctx.fillText(stations_lists[i], x , y - 2*this.line_thickness);
 				this.ctx.translate(x,y - 2 * this.line_thickness);
 			}
@@ -233,6 +237,11 @@ makiwara.rerbstyle.drawing = {
 	add_stations: function(){
 		this.add_stations_on_branch(this.stations_nw, this.line_nodes.n_fnw, this.line_nodes.n_nw, true);
 		this.add_stations_on_branch(this.stations_north_to_south_main_branch, this.line_nodes.n_north, this.line_nodes.n_south, true);
+		this.add_stations_on_branch(this.stations_north_east_branch, this.line_nodes.n_fne, this.line_nodes.n_ne, false);
+		this.add_stations_on_branch(this.stations_south_east_branch, this.line_nodes.n_se, this.line_nodes.n_fse, false);
+		this.add_stations_on_branch(this.stations_south_west_branch, this.line_nodes.n_sw, this.line_nodes.n_fsw, true);
+		
+		
 		
 		//add a listener to detect clicks on stations
 		this.canvas.addEventListener('click', function (e)
